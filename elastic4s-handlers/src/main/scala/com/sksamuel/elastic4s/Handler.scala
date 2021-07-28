@@ -2,6 +2,8 @@ package com.sksamuel.elastic4s
 
 import com.sksamuel.exts.Logging
 
+import scala.util.matching.Regex
+
 /**
   * A [[Handler]] is a typeclass used to create [[ElasticRequest]] instances
   * from elastic4s models, which are the sent to the elasticsearch
@@ -12,6 +14,9 @@ import com.sksamuel.exts.Logging
   * @tparam U the type of the response object returned by this handler
   */
 abstract class Handler[T, U: Manifest] extends Logging {
+
+  protected val TaskRegex: Regex = """\{"task":"(.*):(.*)"\}""".r
+
   def responseHandler: ResponseHandler[U] = ResponseHandler.default[U]
   def build(t: T): ElasticRequest
 }
